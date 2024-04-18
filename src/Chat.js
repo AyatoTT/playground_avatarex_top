@@ -24,7 +24,8 @@ const ChatUI = () => {
     const [messages, setMessages] = useState([]);
 
 
-    const handleSend = async () => {
+    const handleSend = async (event) => {
+        event.preventDefault()
         if (input.trim() !== "") {
 
             const contextuser = {
@@ -34,6 +35,8 @@ const ChatUI = () => {
 
             const newMessages = [...messages, contextuser];
             console.log(messages);
+            setMessages(newMessages);
+            setInput("");
             try {
                 const res = await ChatApi(newMessages, model, 1, 1, token, false)
                 console.log(res)
@@ -47,7 +50,7 @@ const ChatUI = () => {
             } catch (e) {
                 console.log(e)
             }
-            setInput("");
+
         }
     };
 
@@ -271,11 +274,11 @@ const ChatUI = () => {
                     display: 'flex',
                     justifyContent: 'center',
                 }}>
-                    <Box sx={{
+                    <form style={{
                         display: 'flex',
+                        flexDirection: 'row',
                         width: '100%',
-
-                    }}>
+                    }} onSubmit={handleSend}>
                         <TextField
                             fullWidth
                             placeholder="Type a message"
@@ -293,9 +296,9 @@ const ChatUI = () => {
                         <Button
                             fullWidth
                             color="primary"
+                            type="submit"
                             variant="contained"
                             endIcon={<SendIcon/>}
-                            onClick={handleSend}
                             sx={{
                                 flex: '0 0 10%',
                                 borderTopRightRadius: '15px',
@@ -305,19 +308,10 @@ const ChatUI = () => {
                             }}
 
                         >
-                            <Typography variant="body1" sx={{
-                                fontSize: {xs: '6px', sm: '8px', md: '10px'},
-                                display: {
-                                    xs: 'none',
-                                    md: 'inherit'
 
-                                }
-                            }}>
-                                Отправить
-                            </Typography>
 
                         </Button>
-                    </Box>
+                    </form>
                 </Box>
             </Box>
         </Box>
